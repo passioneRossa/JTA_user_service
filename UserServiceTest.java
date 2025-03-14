@@ -1,10 +1,8 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -61,5 +59,17 @@ public class UserServiceTest {
         assertThrows(RuntimeException.class, () -> userService.partitionUsersByActiveStatus(null));
     }
 
+    @Test
+    public void testPrintReport() {
+        assertEquals("", userService.createReport(new ArrayList<>()));
+
+        assertThrows(RuntimeException.class, () -> userService.createReport(null));
+
+        String expectedReport = users.stream()
+                .filter(Objects::nonNull)
+                .map(User::toString)
+                .collect(Collectors.joining(","));
+        assertEquals(expectedReport, userService.createReport(users));
+    }
 
 }
