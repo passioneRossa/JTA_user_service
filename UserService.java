@@ -37,7 +37,7 @@ public class UserService {
         if (users == null) {
             throw new RuntimeException("List can not be null");
         }
-        if (users.size() == 0) {
+        if (users.isEmpty()) {
             return 0d;
         }
         int ageSum = users.stream()
@@ -51,15 +51,20 @@ public class UserService {
         if (users == null) {
             throw new RuntimeException("List can not be null");
         }
-        return users.stream().
-                collect(Collectors.partitioningBy(User::isActive));
+        return users.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.partitioningBy(User::isActive));
     }
 
     public String createReport(List<User> users) {
         if (users == null) {
             throw new RuntimeException("List can not be null");
         }
+        if (users.isEmpty()) {
+            return "";
+        }
         return users.stream()
+                .filter(Objects::nonNull)
                 .map(User::toString)
                 .collect(Collectors.joining(","));
     }
